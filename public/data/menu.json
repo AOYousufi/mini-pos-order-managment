@@ -1,0 +1,25 @@
+{
+  "categories": [
+    {
+      "name": "Burgers",
+      "items": [
+        { "id": "bigmac", "name": "Big Mac", "price": 5.49, "station": "GRILL" },
+        { "id": "cheeseburger", "name": "Cheeseburger", "price": 2.19, "station": "GRILL" }
+      ]
+    },
+    {
+      "name": "Sides",
+      "items": [
+        { "id": "fries_m", "name": "Fries (Medium)", "price": 2.39, "station": "FRY" },
+        { "id": "nuggets_6", "name": "6 Nuggets", "price": 4.29, "station": "FRY" }
+      ]
+    },
+    {
+      "name": "Drinks",
+      "items": [
+        { "id": "coke_m", "name": "Coke (Medium)", "price": 1.89, "station": "DRINKS" },
+        { "id": "water", "name": "Water", "price": 1.29, "station": "DRINKS" }
+      ]
+    }
+  ]
+}
