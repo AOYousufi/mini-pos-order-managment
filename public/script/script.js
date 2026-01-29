@@ -1,13 +1,25 @@
 const menu = document.getElementById('menu')
+const currentOrder = document.getElementById('cart')
 
 
 
+const current_order = []
 
+function showCurrentOrder(){
 
+    currentOrder.innerHTML = ''
 
-
+    current_order.forEach(order => {
+        const li = document.createElement("li")
+        li.textContent = `${order.name} - $${order.price.toFixed(2)}`
+       currentOrder.appendChild(li)
+    });
+     
+}
 
 function renderMenuItems(data){
+
+    menu.innerHTML = ''
 
     data.categories.forEach(category =>{
         const section = document.createElement('section')
@@ -26,8 +38,10 @@ function renderMenuItems(data){
 
 
             btn.addEventListener("click",()=>{
+                current_order.push(item)
+                showCurrentOrder()
                 console.log(`Added ${item.name} to order`);
-                
+                console.log(current_order);
             })
              itemDivs.appendChild(btn)
         })
@@ -39,16 +53,23 @@ function renderMenuItems(data){
    
 }
 
+
 async function fetchMenuItems() {
+  try {
+    // Change this path if your menu.json is NOT inside a "data" folder
+    const response = await fetch("data/menu.json");
 
+    if (!response.ok) {
+      throw new Error(`Failed to load menu.json (HTTP ${response.status})`);
+    }
 
-    const response = await fetch('data/menu.json')
-
-    const data = await response.json()
-    renderMenuItems(data)
-
-
-
+    const data = await response.json();
+    renderMenuItems(data);
+    showCurrentOrder(); // initial render (empty cart)
+  } catch (err) {
+    console.error(err);
+    menu.innerHTML = `<p style="color:red;">Could not load menu.json. Check path and run using a local server (Live Server).</p>`;
+  }
 }
 
 fetchMenuItems()
