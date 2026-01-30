@@ -19,7 +19,22 @@ function showCurrentOrder(){
 
     current_order.forEach(order => {
         const li = document.createElement("li")
-        li.textContent = `${order.name} - $${order.price.toFixed(2)}`
+        const span = document.createElement("span")
+        const btn = document.createElement("button")
+        
+        span.textContent = `${order.name} - $${order.price.toFixed(2)}`
+        btn.type = "button"
+        btn.textContent = "Remove"
+        btn.addEventListener("click",() =>{
+          const index = current_order.indexOf(order)
+          if(index !== -1){
+            current_order.splice(index, 1)
+            showCurrentOrder()
+            calculateTotal()
+          }
+        })
+        li.appendChild(span)
+        li.appendChild(btn)
        currentOrder.appendChild(li)
     });
      
@@ -83,4 +98,3 @@ async function fetchMenuItems() {
 }
 
 fetchMenuItems()
-

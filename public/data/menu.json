@@ -3,22 +3,94 @@
     {
       "name": "Burgers",
       "items": [
-        { "id": "bigmac", "name": "Big Mac", "price": 5.49, "station": "GRILL" },
-        { "id": "cheeseburger", "name": "Cheeseburger", "price": 2.19, "station": "GRILL" }
+        { "id": "classic_burger", "name": "Classic Burger", "price": 4.99, "station": "GRILL" },
+        { "id": "double_burger", "name": "Double Burger", "price": 6.49, "station": "GRILL" },
+        { "id": "cheese_burger", "name": "Cheese Burger", "price": 5.49, "station": "GRILL" },
+        { "id": "double_cheese_burger", "name": "Double Cheese Burger", "price": 6.99, "station": "GRILL" },
+        { "id": "fish_burger", "name": "Fish Burger", "price": 5.79, "station": "GRILL" },
+        { "id": "smoky_burger", "name": "Smoky Burger", "price": 6.29, "station": "GRILL" }
       ]
     },
     {
-      "name": "Sides",
+      "name": "Chicken",
       "items": [
-        { "id": "fries_m", "name": "Fries (Medium)", "price": 2.39, "station": "FRY" },
-        { "id": "nuggets_6", "name": "6 Nuggets", "price": 4.29, "station": "FRY" }
+        { "id": "crispy_chicken_burger", "name": "Crispy Chicken Burger", "price": 5.99, "station": "GRILL" },
+        { "id": "spicy_chicken_burger", "name": "Spicy Chicken Burger", "price": 6.19, "station": "GRILL" },
+        { "id": "chicken_wrap", "name": "Chicken Wrap", "price": 5.49, "station": "GRILL" },
+        { "id": "chicken_strips_3", "name": "Chicken Strips (3)", "price": 4.99, "station": "FRY" },
+        { "id": "chicken_strips_5", "name": "Chicken Strips (5)", "price": 6.99, "station": "FRY" },
+        { "id": "chicken_bites_6", "name": "Chicken Bites (6)", "price": 4.79, "station": "FRY" },
+        { "id": "chicken_bites_12", "name": "Chicken Bites (12)", "price": 8.49, "station": "FRY" }
+      ]
+    },
+    {
+      "name": "Vegetarian",
+      "items": [
+        { "id": "plant_burger", "name": "Plant Burger", "price": 5.99, "station": "GRILL" },
+        { "id": "veggie_wrap", "name": "Veggie Wrap", "price": 5.29, "station": "GRILL" },
+        { "id": "veggie_bites_4", "name": "Veggie Bites (4)", "price": 3.99, "station": "FRY" },
+        { "id": "veggie_bites_8", "name": "Veggie Bites (8)", "price": 6.49, "station": "FRY" }
+      ]
+    },
+    {
+      "name": "Fries & Sides",
+      "items": [
+        { "id": "fries_small", "name": "Fries (Small)", "price": 1.99, "station": "FRY" },
+        { "id": "fries_medium", "name": "Fries (Medium)", "price": 2.49, "station": "FRY" },
+        { "id": "fries_large", "name": "Fries (Large)", "price": 2.99, "station": "FRY" },
+        { "id": "side_salad", "name": "Side Salad", "price": 2.49, "station": "PREP" },
+        { "id": "fruit_cup", "name": "Fruit Cup", "price": 2.19, "station": "PREP" }
+      ]
+    },
+    {
+      "name": "Breakfast",
+      "items": [
+        { "id": "egg_muffin", "name": "Egg Muffin", "price": 3.29, "station": "BREAKFAST" },
+        { "id": "sausage_egg_muffin", "name": "Sausage & Egg Muffin", "price": 3.99, "station": "BREAKFAST" },
+        { "id": "bacon_egg_muffin", "name": "Bacon & Egg Muffin", "price": 3.99, "station": "BREAKFAST" },
+        { "id": "hash_browns", "name": "Hash Browns", "price": 1.79, "station": "FRY" },
+        { "id": "pancakes", "name": "Pancakes with Syrup", "price": 3.49, "station": "BREAKFAST" }
+      ]
+    },
+    {
+      "name": "Desserts",
+      "items": [
+        { "id": "apple_pie", "name": "Apple Pie", "price": 1.79, "station": "DESSERT" },
+        { "id": "ice_cream_vanilla", "name": "Vanilla Ice Cream", "price": 1.49, "station": "DESSERT" },
+        { "id": "ice_cream_chocolate", "name": "Chocolate Ice Cream", "price": 1.49, "station": "DESSERT" },
+        { "id": "sundae_strawberry", "name": "Strawberry Sundae", "price": 2.29, "station": "DESSERT" },
+        { "id": "sundae_caramel", "name": "Caramel Sundae", "price": 2.29, "station": "DESSERT" }
       ]
     },
     {
       "name": "Drinks",
       "items": [
-        { "id": "coke_m", "name": "Coke (Medium)", "price": 1.89, "station": "DRINKS" },
+        { "id": "cola_small", "name": "Cola (Small)", "price": 1.49, "station": "DRINKS" },
+        { "id": "cola_medium", "name": "Cola (Medium)", "price": 1.99, "station": "DRINKS" },
+        { "id": "cola_large", "name": "Cola (Large)", "price": 2.49, "station": "DRINKS" },
+        { "id": "orange_drink_medium", "name": "Orange Drink (Medium)", "price": 1.99, "station": "DRINKS" },
+        { "id": "lemon_drink_medium", "name": "Lemon Drink (Medium)", "price": 1.99, "station": "DRINKS" },
         { "id": "water", "name": "Water", "price": 1.29, "station": "DRINKS" }
+      ]
+    },
+    {
+      "name": "Hot Drinks",
+      "items": [
+        { "id": "coffee_black", "name": "Black Coffee", "price": 1.79, "station": "CAFE" },
+        { "id": "coffee_white", "name": "White Coffee", "price": 1.99, "station": "CAFE" },
+        { "id": "latte", "name": "Latte", "price": 2.49, "station": "CAFE" },
+        { "id": "cappuccino", "name": "Cappuccino", "price": 2.49, "station": "CAFE" },
+        { "id": "hot_chocolate", "name": "Hot Chocolate", "price": 2.29, "station": "CAFE" },
+        { "id": "tea", "name": "Tea", "price": 1.59, "station": "CAFE" }
+      ]
+    },
+    {
+      "name": "Sauces",
+      "items": [
+        { "id": "ketchup_dip", "name": "Ketchup Dip", "price": 0.30, "station": "SAUCES" },
+        { "id": "bbq_dip", "name": "BBQ Dip", "price": 0.30, "station": "SAUCES" },
+        { "id": "sweet_chilli_dip", "name": "Sweet Chilli Dip", "price": 0.30, "station": "SAUCES" },
+        { "id": "garlic_mayo_dip", "name": "Garlic Mayo Dip", "price": 0.30, "station": "SAUCES" }
       ]
     }
   ]
