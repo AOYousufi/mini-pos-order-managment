@@ -1,100 +1,184 @@
-const menu = document.getElementById('menu')
-const currentOrder = document.getElementById('cart')
-const totalPrice = document.getElementById("total")
+const menu = document.getElementById("menu");
+const currentOrder = document.getElementById("cart");
+const totalPrice = document.getElementById("total");
+const placeOrderBtn = document.getElementById("placebtn");
+const clearbtn = document.getElementById("clearbtn");
+const orderHistory = document.getElementById("order-history");
 
-console.log(totalPrice)
-const current_order = []
+const STORAGE_KEY = "orders";
+const current_order = [];
 
+const toMoney = v => Number(v ?? 0);
+const moneyText = v => `£${toMoney(v).toFixed(2)}`;
 
-
-function calculateTotal(){
-
-total = current_order.reduce((total, item)=> total + item.price, 0)
-totalPrice.textContent = `Total: $${total.toFixed(2)}`
-  
-}
-function showCurrentOrder(){
-
-    currentOrder.innerHTML = ''
-
-    current_order.forEach(order => {
-        const li = document.createElement("li")
-        const span = document.createElement("span")
-        const btn = document.createElement("button")
-        
-        span.textContent = `${order.name} - $${order.price.toFixed(2)}`
-        btn.type = "button"
-        btn.textContent = "Remove"
-        btn.addEventListener("click",() =>{
-          const index = current_order.indexOf(order)
-          if(index !== -1){
-            current_order.splice(index, 1)
-            showCurrentOrder()
-            calculateTotal()
-          }
-        })
-        li.appendChild(span)
-        li.appendChild(btn)
-       currentOrder.appendChild(li)
-    });
-     
-}
-
-function renderMenuItems(data){
-
-    menu.innerHTML = ''
-
-    data.categories.forEach(category =>{
-        const section = document.createElement('section')
-
-        const heading= document.createElement('h3')
-        heading.textContent = category.name
-        section.appendChild(heading)
-
-
-        const itemDivs = document.createElement('div')
-
-        category.items.forEach (item =>{
-            const btn = document.createElement('button')
-            btn.type = "button"
-            btn.textContent = `${item.name} - $${item.price.toFixed(2)}`
-
-
-            btn.addEventListener("click",()=>{
-                current_order.push(item)
-                showCurrentOrder()
-                calculateTotal()
-                
-                console.log(`Added ${item.name} to order`);
-                console.log(current_order);
-            })
-             itemDivs.appendChild(btn)
-        })
-
-        section.appendChild(itemDivs)
-    menu.appendChild(section)
-    })
-
-   
-}
-
-
-async function fetchMenuItems() {
+function loadOrders() {
   try {
-      
-    const response = await fetch("data/menu.json");
-
-    if (!response.ok) {
-      throw new Error(`Failed to load menu.json (HTTP ${response.status})`);
-    }
-
-    const data = await response.json();
-    renderMenuItems(data);
-    showCurrentOrder(); 
-  } catch (err) {
-    console.error(err);
-    menu.innerHTML = `<p style="color:red;">Could not load menu.json. Check path and run using a local server (Live Server).</p>`;
+    const raw = localStorage.getItem(STORAGE_KEY);
+    const parsed = raw ? JSON.parse(raw) : [];
+    return Array.isArray(parsed) ? parsed : [];
+  } catch {
+    return [];
   }
 }
 
-fetchMenuItems()
+function saveOrders(orders) {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(orders));
+}
+
+function formatDate(iso) {
+  const d = new Date(iso);
+  return isNaN(d.getTime()) ? String(iso) : d.toLocaleString("en-GB");
+}
+
+function calculateTotal() {
+  const total = current_order.reduce((sum, item) => sum + toMoney(item.price), 0);
+  totalPrice.textContent = `Total: ${moneyText(total)}`;
+}
+
+function showCurrentOrder() {
+  currentOrder.innerHTML = "";
+
+  current_order.forEach((item, index) => {
+    const li = document.createElement("li");
+    const span = document.createElement("span");
+    const btn = document.createElement("button");
+
+    span.textContent = `${item.name} - ${moneyText(item.price)}`;
+    btn.type = "button";
+    btn.textContent = "Remove";
+
+    btn.addEventListener("click", () => {
+      current_order.splice(index, 1);
+      showCurrentOrder();
+      calculateTotal();
+    });
+
+    li.appendChild(span);
+    li.appendChild(btn);
+    currentOrder.appendChild(li);
+  });
+}
+
+function renderMenuItems(data) {
+  menu.innerHTML = "";
+
+  (data.categories || []).forEach(category => {
+    const section = document.createElement("section");
+    const heading = document.createElement("h3");
+    const itemDivs = document.createElement("div");
+
+    heading.textContent = category.name ?? "Menu";
+    section.appendChild(heading);
+
+    (category.items || []).forEach(item => {
+      const btn = document.createElement("button");
+      btn.type = "button";
+      btn.textContent = `${item.name} - ${moneyText(item.price)}`;
+
+      btn.addEventListener("click", () => {
+        current_order.push({
+          id: item.id,
+          name: item.name,
+          price: toMoney(item.price),
+          station: item.station
+        });
+        showCurrentOrder();
+        calculateTotal();
+      });
+
+      itemDivs.appendChild(btn);
+    });
+
+    section.appendChild(itemDivs);
+    menu.appendChild(section);
+  });
+}
+
+async function fetchMenuItems() {
+  try {
+    const response = await fetch("data/menu.json");
+    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+    const data = await response.json();
+    renderMenuItems(data);
+    showCurrentOrder();
+    calculateTotal();
+  } catch {
+    menu.innerHTML = "<p style='color:red;'>Failed to load menu.</p>";
+  }
+}
+
+function showOrders() {
+  const orders = loadOrders();
+  orderHistory.innerHTML = "";
+
+  orders.slice().reverse().forEach((order, idxFromNewest) => {
+    const wrapper = document.createElement("div");
+    const header = document.createElement("div");
+    const title = document.createElement("span");
+    const meta = document.createElement("span");
+    const itemsList = document.createElement("ul");
+    const total = document.createElement("div");
+
+    const displayNumber = orders.length - idxFromNewest;
+
+    title.textContent = `Order ${displayNumber} `;
+    meta.textContent = `(${formatDate(order.placedAt)})`;
+    header.appendChild(title);
+    header.appendChild(meta);
+
+    (order.items || []).forEach(it => {
+      const li = document.createElement("li");
+      li.textContent = `${it.name} - ${moneyText(it.price)}`;
+      itemsList.appendChild(li);
+    });
+
+    total.textContent = `Total: ${moneyText(order.total)}`;
+
+    wrapper.appendChild(header);
+    wrapper.appendChild(itemsList);
+    wrapper.appendChild(total);
+
+    orderHistory.appendChild(wrapper);
+  });
+}
+
+clearbtn.addEventListener("click", () => {
+  current_order.length = 0;
+  showCurrentOrder();
+  calculateTotal();
+});
+
+placeOrderBtn.addEventListener("click", () => {
+  if (current_order.length === 0) {
+    alert("Your order is empty!");
+    return;
+  }
+
+  const total = current_order.reduce((sum, item) => sum + toMoney(item.price), 0);
+
+  const newOrder = {
+    id: `${Date.now()}-${Math.random().toString(16).slice(2)}`,
+    placedAt: new Date().toISOString(),
+    items: current_order.map(i => ({
+      id: i.id,
+      name: i.name,
+      price: toMoney(i.price),
+      station: i.station
+    })),
+    total: Number(total.toFixed(2))
+  };
+
+  const orders = loadOrders();
+  orders.push(newOrder);
+  saveOrders(orders);
+
+  alert("Thank you for your order!");
+
+  current_order.length = 0;
+  showCurrentOrder();
+  calculateTotal();
+  showOrders();
+});
+
+fetchMenuItems();
+showOrders();
