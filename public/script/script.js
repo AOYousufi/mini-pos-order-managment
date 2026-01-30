@@ -1,10 +1,18 @@
 const menu = document.getElementById('menu')
 const currentOrder = document.getElementById('cart')
+const totalPrice = document.getElementById("total")
 
-
-
+console.log(totalPrice)
 const current_order = []
 
+
+
+function calculateTotal(){
+
+total = current_order.reduce((total, item)=> total + item.price, 0)
+totalPrice.textContent = `Total: $${total.toFixed(2)}`
+  
+}
 function showCurrentOrder(){
 
     currentOrder.innerHTML = ''
@@ -40,6 +48,8 @@ function renderMenuItems(data){
             btn.addEventListener("click",()=>{
                 current_order.push(item)
                 showCurrentOrder()
+                calculateTotal()
+                
                 console.log(`Added ${item.name} to order`);
                 console.log(current_order);
             })
@@ -56,7 +66,7 @@ function renderMenuItems(data){
 
 async function fetchMenuItems() {
   try {
-    // Change this path if your menu.json is NOT inside a "data" folder
+      
     const response = await fetch("data/menu.json");
 
     if (!response.ok) {
@@ -65,7 +75,7 @@ async function fetchMenuItems() {
 
     const data = await response.json();
     renderMenuItems(data);
-    showCurrentOrder(); // initial render (empty cart)
+    showCurrentOrder(); 
   } catch (err) {
     console.error(err);
     menu.innerHTML = `<p style="color:red;">Could not load menu.json. Check path and run using a local server (Live Server).</p>`;
@@ -73,3 +83,4 @@ async function fetchMenuItems() {
 }
 
 fetchMenuItems()
+
