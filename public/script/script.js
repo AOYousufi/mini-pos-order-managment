@@ -7,7 +7,7 @@ const orderHistory = document.getElementById("order-history");
 const serviceTypeSection = document.getElementById("service-section");
 const serviceTypeSelect = document.getElementById("service-type");
 
-
+let total = 0;
 
 serviceTypeSection.addEventListener("change", () => {
   const selectedService = serviceTypeSelect.value;
@@ -45,7 +45,7 @@ function formatDate(iso) {
 }
 
 function calculateTotal() {
-  let total = current_order.reduce((sum, item) => sum + toMoney(item.price), 0);
+   total = current_order.reduce((sum, item) => sum + toMoney(item.price), 0);
 
   if (serviceTypeSelect.value === "delivery") {
     const deliveryFee = 3.50;
@@ -183,7 +183,7 @@ placeOrderBtn.addEventListener("click", () => {
     return;
   }
 
-  const total = current_order.reduce((sum, item) => sum + toMoney(item.price), 0);
+
 
   const newOrder = {
     id: `${Date.now()}-${Math.random().toString(16).slice(2)}`,
@@ -194,7 +194,8 @@ placeOrderBtn.addEventListener("click", () => {
       price: toMoney(i.price),
       station: i.station
     })),
-    total: Number(total.toFixed(2))
+    total: Number(total.toFixed(2)),
+    serviceType: serviceTypeSelect.value
   };
 
   const orders = loadOrders();
