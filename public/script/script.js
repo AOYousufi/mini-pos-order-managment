@@ -4,6 +4,16 @@ const totalPrice = document.getElementById("total");
 const placeOrderBtn = document.getElementById("placebtn");
 const clearbtn = document.getElementById("clearbtn");
 const orderHistory = document.getElementById("order-history");
+const serviceTypeSection = document.getElementById("service-section");
+const serviceTypeSelect = document.getElementById("service-type");
+
+
+
+serviceTypeSection.addEventListener("change", () => {
+  const selectedService = serviceTypeSelect.value;
+  alert(`Service type changed to: ${selectedService}`);
+});
+
 
 const STORAGE_KEY = "orders";
 const current_order = [];
