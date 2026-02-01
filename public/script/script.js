@@ -11,8 +11,12 @@ const serviceTypeSelect = document.getElementById("service-type");
 
 serviceTypeSection.addEventListener("change", () => {
   const selectedService = serviceTypeSelect.value;
+  showCurrentOrder()
+  calculateTotal()
   alert(`Service type changed to: ${selectedService}`);
 });
+
+
 
 
 const STORAGE_KEY = "orders";
@@ -41,7 +45,12 @@ function formatDate(iso) {
 }
 
 function calculateTotal() {
-  const total = current_order.reduce((sum, item) => sum + toMoney(item.price), 0);
+  let total = current_order.reduce((sum, item) => sum + toMoney(item.price), 0);
+
+  if (serviceTypeSelect.value === "delivery") {
+    const deliveryFee = 3.50;
+    total += deliveryFee;
+  }
   totalPrice.textContent = `Total: ${moneyText(total)}`;
 }
 
@@ -67,6 +76,16 @@ function showCurrentOrder() {
     li.appendChild(btn);
     currentOrder.appendChild(li);
   });
+      const servOptions = document.createElement("span");
+      if (serviceTypeSelect.value === "delivery") {
+        servOptions.textContent = " (Delivery Fee Applied : £3.50)";
+       currentOrder.appendChild(servOptions);
+      }else{
+        servOptions.textContent = "Service: " + serviceTypeSelect.value ;
+        currentOrder.appendChild(servOptions);
+      }
+     
+
 }
 
 function renderMenuItems(data) {
