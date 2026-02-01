@@ -1,3 +1,5 @@
+
+
 const showOrder = document.getElementById("showorders");
 
 function loadOrders() {
@@ -16,18 +18,11 @@ console.log("Orders loaded:", loadOrders());
 const loadedOrder = loadOrders();   
 
 
-loadedOrder.map (order =>{
-    console.log(order.items[0].station);
+const grill = loadedOrder.map (order =>{
+    if (order.items[0].station == "GRILL") {
+        return order;
+    }
+    
 })
-
+console.log(grill)
 console.log(loadedOrder[6].items[0].station)
-    function displayOrders() {
-  const orders = loadOrders();
-  showOrder.innerHTML = orders.map(order => `
-    <div class="order">
-      <h3>Order #${order.id}</h3>
-      <p>Items: ${order.items.join(", ")}</p>
-      <p>Total: £${order.total.toFixed(2)}</p>
-    </div>
-  `).join("");
-}
