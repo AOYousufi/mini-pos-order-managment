@@ -1,3 +1,4 @@
+
 const menu = document.getElementById("menu");
 const currentOrder = document.getElementById("cart");
 const totalPrice = document.getElementById("total");
@@ -212,3 +213,5 @@ placeOrderBtn.addEventListener("click", () => {
 
 fetchMenuItems();
 showOrders();
+
+

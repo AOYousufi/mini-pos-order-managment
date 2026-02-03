@@ -4,7 +4,7 @@ const showOrder = document.getElementById("showorders");
 
 
 
-
+ 
 function loadOrders() {
     const orders = JSON.parse(localStorage.getItem("orders")) || [];
     const listOrder = document.createElement("ul");
@@ -31,8 +31,16 @@ function loadOrders() {
     showOrder.appendChild(listOrder);
 }
 
-
+window.addEventListener("storage", (e)=>{
+    if(e.key === "orders"){
+        showOrder.innerHTML = "";
+        loadOrders();
+    }
+})
 loadOrders();
 
     
+
+
+
 
