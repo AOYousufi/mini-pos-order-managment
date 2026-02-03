@@ -193,10 +193,12 @@ placeOrderBtn.addEventListener("click", () => {
       id: i.id,
       name: i.name,
       price: toMoney(i.price),
-      station: i.station
+      station: i.station,
+      status :"pending"
     })),
     total: Number(total.toFixed(2)),
-    serviceType: serviceTypeSelect.value
+    serviceType: serviceTypeSelect.value,
+    status :"pending"
   };
 
   const orders = loadOrders();
