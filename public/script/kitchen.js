@@ -2,27 +2,37 @@
 
 const showOrder = document.getElementById("showorders");
 
+
+
+
 function loadOrders() {
-  try {
-    const raw = localStorage.getItem("orders");
-    const parsed = raw ? JSON.parse(raw) : [];
-    return Array.isArray(parsed) ? parsed : [];
-  } catch {
-    return [];
-  }
+    const orders = JSON.parse(localStorage.getItem("orders")) || [];
+    const listOrder = document.createElement("ul");
+  
+ 
+   
+    let grillOrders = [];
+    orders.forEach(order =>{
+      
+     order.items.forEach(item => {
+            item.station === "GRILL" ? grillOrders.push({"orderid": order.id, item}) : null
+        })
+    })
+    
+
+    console.log(grillOrders);
+
+    grillOrders.forEach(order => {
+  const items = document.createElement("li");
+        items.textContent = `Order ID: ${order.orderid}, Item Name: ${order.item.name}`;
+        listOrder.appendChild(items);
+    });
+  
+    showOrder.appendChild(listOrder);
 }
 
 
-console.log("Orders loaded:", loadOrders());
+loadOrders();
 
-const loadedOrder = loadOrders();   
-
-
-const grill = loadedOrder.map (order =>{
-    if (order.items[0].station == "GRILL") {
-        return order;
-    }
     
-})
-console.log(grill)
-console.log(loadedOrder[6].items[0].station)
+
