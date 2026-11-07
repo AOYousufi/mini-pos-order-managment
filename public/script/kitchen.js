@@ -1,63 +1,62 @@
-
-
 const showOrder = document.getElementById("showorders");
 
-
-
- 
-function loadOrders() {
-    const orders = JSON.parse(localStorage.getItem("orders")) || [];
-    const listOrder = document.createElement("ul");
-  
- 
-   
-    let grillOrders = [];
-    orders.forEach(order =>{
-      
-     order.items.forEach(item => {
-            item.station === "GRILL" ? grillOrders.push({"orderid": order.id, item}) : null
-        })
-    })
-    
-
-    console.log(grillOrders);
-
-    grillOrders.forEach(order => {
-       const items = document.createElement("li");
-       const serveBtn = document.createElement("button");
-       serveBtn.textContent = "Serve";
-       serveBtn.addEventListener("click", () => {
-           order.status = "served"
-           console.log(`Order ${order.orderid} served`);
-           orders.forEach(o =>{
-               o.items.forEach(i =>{
-                   if(i.name === order.item.name && o.id === order.orderid){
-                       i.status = "served"
-                   }
-               })
-           });
-            localStorage.setItem("orders", JSON.stringify(orders)); 
-            showOrder.innerHTML = "";
-            loadOrders(); 
-       });
-        items.textContent = `Order ID: ${order.orderid}, Item Name: ${order.item.name} , Status: ${order.item.status || "pending"} `;
-        listOrder.appendChild(items);
-        listOrder.appendChild(serveBtn);
-    });
-  
-    showOrder.appendChild(listOrder);
+function readOrders() {
+  try {
+    const parsed = JSON.parse(localStorage.getItem("orders") || "[]");
+    return Array.isArray(parsed) ? parsed : [];
+  } catch {
+    return [];
+  }
 }
 
-window.addEventListener("storage", (e)=>{
-    if(e.key === "orders"){
-        showOrder.innerHTML = "";
+function loadOrders() {
+  const orders = readOrders();
+  const list = document.createElement("ul");
+  let pendingCount = 0;
+
+  showOrder.replaceChildren();
+
+  orders.forEach((order) => {
+    if (!Array.isArray(order.items)) return;
+
+    order.items.forEach((item, itemIndex) => {
+      if (item.station !== "GRILL" || item.status === "served") return;
+      pendingCount += 1;
+
+      const row = document.createElement("li");
+      const serveButton = document.createElement("button");
+      row.textContent = `Order ID: ${order.id}, Item Name: ${item.name}, Status: pending `;
+      serveButton.type = "button";
+      serveButton.textContent = "Serve";
+
+      serveButton.addEventListener("click", () => {
+        // Read the latest copy so updates from other kitchen stations are kept.
+        const latestOrders = readOrders();
+        const targetOrder = latestOrders.find((entry) => entry.id === order.id);
+        const targetItem = targetOrder?.items?.[itemIndex];
+        if (targetItem?.station === "GRILL" && targetItem.status !== "served") {
+          targetItem.status = "served";
+          localStorage.setItem("orders", JSON.stringify(latestOrders));
+        }
         loadOrders();
-    }
-})
+      });
+
+      row.appendChild(serveButton);
+      list.appendChild(row);
+    });
+  });
+
+  if (pendingCount) {
+    showOrder.appendChild(list);
+  } else {
+    const emptyMessage = document.createElement("p");
+    emptyMessage.textContent = "No grill orders waiting.";
+    showOrder.appendChild(emptyMessage);
+  }
+}
+
+window.addEventListener("storage", (event) => {
+  if (event.key === "orders") loadOrders();
+});
+
 loadOrders();
-
-    
-
-
-
-
